@@ -1,0 +1,9 @@
+notes!
+
+Lesson 1 - Project Setup
+1. Download latest IntelliJ Community Edition. I'm using 14.0.3
+2. Download Android stand alone SDK
+3. Run the libGDX setup ui to generate your project
+4. Open IntelliJ and import the project using the default gradle wrapper.
+5. Set up the desktop run configuration and make its working dir android/assets
+6. Verify you can run the desktop program.
