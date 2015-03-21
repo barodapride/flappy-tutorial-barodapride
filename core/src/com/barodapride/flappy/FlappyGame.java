@@ -14,7 +14,13 @@ public class FlappyGame extends Game {
 
 	@Override
 	public void create () {
+        Assets.load();
 		setScreen(new GameplayScreen(this));
 	}
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        Assets.dispose();
+    }
 }
