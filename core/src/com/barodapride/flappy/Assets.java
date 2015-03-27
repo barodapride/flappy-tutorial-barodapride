@@ -16,13 +16,15 @@ public class Assets {
 
     // Non-Disposeables
     public static TextureRegion bird;
+    public static TextureRegion background;
 
     public static void load() {
 
         atlas = new TextureAtlas("pack.atlas");
         batch = new SpriteBatch();
 
-        bird = atlas.findRegion("bird");
+        bird = atlas.findRegion("bird16x16");
+        background = atlas.findRegion("background-300x480");
 
     }
 
