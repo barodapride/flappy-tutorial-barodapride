@@ -4,6 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -26,6 +27,8 @@ public class GameplayScreen extends ScreenAdapter {
         gameplayStage = new Stage(new StretchViewport(FlappyGame.WIDTH, FlappyGame.HEIGHT, camera));
 
         bird = new Bird();
+        bird.setPosition(FlappyGame.WIDTH*.25f, FlappyGame.HEIGHT/2, Align.center);
+
         background = new Image(Assets.background);
 
         gameplayStage.addActor(background);
