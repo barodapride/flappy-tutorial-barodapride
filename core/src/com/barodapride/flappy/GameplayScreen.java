@@ -19,6 +19,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     private Bird bird;
     private Image background;
+    private Image ground;
 
     public GameplayScreen(FlappyGame game) {
         this.game = game;
@@ -30,8 +31,10 @@ public class GameplayScreen extends ScreenAdapter {
         bird.setPosition(FlappyGame.WIDTH*.25f, FlappyGame.HEIGHT/2, Align.center);
 
         background = new Image(Assets.background);
+        ground = new Image(Assets.ground);
 
         gameplayStage.addActor(background);
+        gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
 
     }

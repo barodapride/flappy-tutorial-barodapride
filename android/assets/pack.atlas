@@ -6,15 +6,22 @@ filter: Nearest,Nearest
 repeat: none
 background-300x480
   rotate: false
-  xy: 2, 20
+  xy: 2, 28
   size: 300, 480
   orig: 300, 480
   offset: 0, 0
   index: -1
 bird16x16
   rotate: false
-  xy: 2, 2
+  xy: 304, 492
   size: 16, 16
   orig: 16, 16
+  offset: 0, 0
+  index: -1
+ground-300x24
+  rotate: false
+  xy: 2, 2
+  size: 300, 24
+  orig: 300, 24
   offset: 0, 0
   index: -1

@@ -17,6 +17,7 @@ public class Assets {
     // Non-Disposeables
     public static TextureRegion bird;
     public static TextureRegion background;
+    public static TextureRegion ground;
 
     public static void load() {
 
@@ -25,6 +26,7 @@ public class Assets {
 
         bird = atlas.findRegion("bird16x16");
         background = atlas.findRegion("background-300x480");
+        ground = atlas.findRegion("ground-300x24");
 
     }
 
