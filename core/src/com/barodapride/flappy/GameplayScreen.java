@@ -15,6 +15,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  */
 public class GameplayScreen extends ScreenAdapter {
 
+    public static final float PIPE_SPACING = 200f;
+    public static final int PIPE_SETS = 3;
+
+
     protected OrthographicCamera camera;
     protected FlappyGame game;
 
@@ -39,14 +43,9 @@ public class GameplayScreen extends ScreenAdapter {
 
         pipePairs = new Array<PipePair>();
 
-        Pipe topPipe = new Pipe();
-        Pipe bottomPipe = new Pipe();
-        topPipe.getRegion().flip(false, true);
-        PipePair pair = new PipePair(topPipe, bottomPipe);
-        pair.init();
-
-        // add the pair to the list
-        pipePairs.add(pair);
+        initFirstSetOfPipes();
+        initSecondSetOfPipes();
+        initThirdSetOfPipes();
 
         background = new Image(Assets.background);
         ground = new Image(Assets.ground);
@@ -59,6 +58,39 @@ public class GameplayScreen extends ScreenAdapter {
 
         // Setup the input processor
         initInputProcessor();
+    }
+
+    private void initThirdSetOfPipes() {
+        Pipe topPipe = new Pipe();
+        Pipe bottomPipe = new Pipe();
+        topPipe.getRegion().flip(false, true);
+        PipePair pair = new PipePair(topPipe, bottomPipe);
+        pair.initThird();
+
+        // add the pair to the list
+        pipePairs.add(pair);
+    }
+
+    private void initSecondSetOfPipes() {
+        Pipe topPipe = new Pipe();
+        Pipe bottomPipe = new Pipe();
+        topPipe.getRegion().flip(false, true);
+        PipePair pair = new PipePair(topPipe, bottomPipe);
+        pair.initSecond();
+
+        // add the pair to the list
+        pipePairs.add(pair);
+    }
+
+    private void initFirstSetOfPipes() {
+        Pipe topPipe = new Pipe();
+        Pipe bottomPipe = new Pipe();
+        topPipe.getRegion().flip(false, true);
+        PipePair pair = new PipePair(topPipe, bottomPipe);
+        pair.initFirst();
+
+        // add the pair to the list
+        pipePairs.add(pair);
     }
 
     @Override

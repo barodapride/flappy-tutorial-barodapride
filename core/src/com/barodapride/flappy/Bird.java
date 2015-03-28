@@ -15,8 +15,8 @@ public class Bird extends Actor {
     public static final int WIDTH = 32; // pixels
     public static final int HEIGHT = 32;
 
-    public static final float GRAVITY = 780f; // pixels per second per second
-    public static final float JUMP_VELOCITY = 310f; // pixels per second
+    public static final float GRAVITY = 900f; // pixels per second per second
+    public static final float JUMP_VELOCITY = 350f; // pixels per second
 
     // Actor keeps track of position so we just need to keep track of velocity and acceleration
     private Vector2 vel;

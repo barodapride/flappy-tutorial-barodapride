@@ -1,5 +1,6 @@
 package com.barodapride.flappy;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 /**
@@ -7,10 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  */
 public class PipePair {
 
+    public static final float STARTING_X_POSITION = 400f;
     private Pipe topPipe;
     private Pipe bottomPipe;
 
-    public static float GAP_SIZE = 150f;
+    public static float GAP_SIZE = 130f;
 
     public PipePair(Pipe topPipe, Pipe bottomPipe) {
         this.topPipe = topPipe;
@@ -31,17 +33,28 @@ public class PipePair {
      */
     private void reInitPipes() {
         float y = Utils.getRandomYOpening();
-        bottomPipe.setPosition(bottomPipe.getX() + 350, y - GAP_SIZE/2, Align.topLeft);
-        topPipe.setPosition(topPipe.getX() + 350, y + GAP_SIZE/2, Align.bottomLeft);
+
+        float xDisplacement = GameplayScreen.PIPE_SPACING * GameplayScreen.PIPE_SETS;
+
+        bottomPipe.setPosition(bottomPipe.getX() + xDisplacement, y - GAP_SIZE/2, Align.topLeft);
+        topPipe.setPosition(topPipe.getX() + xDisplacement, y + GAP_SIZE/2, Align.bottomLeft);
     }
 
-    /**
-     * Initialize the pipes for the first time
-     */
-    public void init(){
+
+    public void initFirst(){
         float y = Utils.getRandomYOpening();
-        bottomPipe.setPosition(350, y - GAP_SIZE/2, Align.topLeft);
-        topPipe.setPosition(350, y + GAP_SIZE/2, Align.bottomLeft);
+        bottomPipe.setPosition(STARTING_X_POSITION, y - GAP_SIZE/2, Align.topLeft);
+        topPipe.setPosition(STARTING_X_POSITION, y + GAP_SIZE/2, Align.bottomLeft);
+    }
+    public void initSecond(){
+        float y = Utils.getRandomYOpening();
+        bottomPipe.setPosition(STARTING_X_POSITION + GameplayScreen.PIPE_SPACING, y - GAP_SIZE/2, Align.topLeft);
+        topPipe.setPosition(STARTING_X_POSITION + GameplayScreen.PIPE_SPACING, y + GAP_SIZE/2, Align.bottomLeft);
+    }
+    public void initThird(){
+        float y = Utils.getRandomYOpening();
+        bottomPipe.setPosition(STARTING_X_POSITION + GameplayScreen.PIPE_SPACING * 2, y - GAP_SIZE/2, Align.topLeft);
+        topPipe.setPosition(STARTING_X_POSITION + GameplayScreen.PIPE_SPACING * 2, y + GAP_SIZE/2, Align.bottomLeft);
     }
 
     public Pipe getTopPipe() {

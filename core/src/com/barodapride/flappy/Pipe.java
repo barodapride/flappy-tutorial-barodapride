@@ -15,7 +15,7 @@ public class Pipe extends Actor {
     public static final int WIDTH = 64; // pixels
     public static final int HEIGHT = 400;
 
-    public static final float MOVE_VELOCITY = 80f; // pixels per second
+    public static final float MOVE_VELOCITY = 120f; // pixels per second
 
     // Actor keeps track of position so we just need to keep track of velocity and acceleration
     private Vector2 vel;
