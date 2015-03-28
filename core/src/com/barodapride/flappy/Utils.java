@@ -8,11 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 public class Utils {
 
 
-    /**
-     *
-     * @return a random Y that represents the top of the pipe
-     */
-    public static float generateTopYPositionForABottomPipe(){
-        return MathUtils.random(FlappyGame.GROUND_LEVEL + Bird.HEIGHT, FlappyGame.HEIGHT * .75f);
+    public static float getRandomYOpening(){
+        return MathUtils.random(FlappyGame.HEIGHT * .15f, FlappyGame.HEIGHT * .85f);
     }
 }

@@ -2,12 +2,12 @@ package com.barodapride.flappy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -21,7 +21,8 @@ public class GameplayScreen extends ScreenAdapter {
     private Stage gameplayStage;
 
     private Bird bird;
-    private Pipe pipe;
+    private Array<PipePair> pipePairs;
+
     private Image background;
     private Image ground;
 
@@ -34,10 +35,18 @@ public class GameplayScreen extends ScreenAdapter {
         gameplayStage = new Stage(new StretchViewport(FlappyGame.WIDTH, FlappyGame.HEIGHT, camera));
 
         bird = new Bird();
-        bird.setPosition(FlappyGame.WIDTH*.25f, FlappyGame.HEIGHT/2, Align.center);
+        bird.setPosition(FlappyGame.WIDTH * .25f, FlappyGame.HEIGHT / 2, Align.center);
 
-        pipe = new Pipe();
-        pipe.setPosition(200, Utils.generateTopYPositionForABottomPipe(), Align.top);
+        pipePairs = new Array<PipePair>();
+
+        Pipe topPipe = new Pipe();
+        Pipe bottomPipe = new Pipe();
+        topPipe.getRegion().flip(false, true);
+        PipePair pair = new PipePair(topPipe, bottomPipe);
+        pair.init();
+
+        // add the pair to the list
+        pipePairs.add(pair);
 
         background = new Image(Assets.background);
         ground = new Image(Assets.ground);
@@ -46,12 +55,11 @@ public class GameplayScreen extends ScreenAdapter {
         gameplayStage.addActor(background);
         gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
-        gameplayStage.addActor(pipe);
+        addPipes(gameplayStage);
 
         // Setup the input processor
         initInputProcessor();
     }
-
 
     @Override
     public void render(float delta) {
@@ -61,8 +69,15 @@ public class GameplayScreen extends ScreenAdapter {
             justTouched = false;
         }
 
+        updatePipePairs();
         gameplayStage.act();
         gameplayStage.draw();
+    }
+
+    private void updatePipePairs() {
+        for (int i = 0; i < pipePairs.size; i++) {
+            pipePairs.get(i).update();
+        }
     }
 
     @Override
@@ -77,6 +92,13 @@ public class GameplayScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         gameplayStage.dispose();
+    }
+
+    private void addPipes(Stage gameplayStage) {
+        for (int i = 0; i < pipePairs.size; i++) {
+            gameplayStage.addActor(pipePairs.get(i).getBottomPipe());
+            gameplayStage.addActor(pipePairs.get(i).getTopPipe());
+        }
     }
 
     /**

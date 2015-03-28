@@ -67,4 +67,7 @@ public class Pipe extends Actor {
                 getScaleY(), getRotation());
     }
 
+    public TextureRegion getRegion() {
+        return region;
+    }
 }
