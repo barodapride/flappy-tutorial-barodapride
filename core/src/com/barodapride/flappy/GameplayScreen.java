@@ -28,7 +28,10 @@ public class GameplayScreen extends ScreenAdapter {
     private Array<PipePair> pipePairs;
 
     private Image background;
-    private Image ground;
+
+    private Ground ground1;
+    private Ground ground2;
+    private GroundPair groundPair;
 
     private boolean justTouched;
 
@@ -48,13 +51,17 @@ public class GameplayScreen extends ScreenAdapter {
         initThirdSetOfPipes();
 
         background = new Image(Assets.background);
-        ground = new Image(Assets.ground);
+        ground1 = new Ground();
+        ground2 = new Ground();
+        ground2.setPosition(FlappyGame.WIDTH, 0);
+        groundPair = new GroundPair(ground1, ground2);
 
         // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(background);
-        gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
         addPipes(gameplayStage);
+        gameplayStage.addActor(ground1);
+        gameplayStage.addActor(ground2);
 
         // Setup the input processor
         initInputProcessor();
@@ -102,8 +109,13 @@ public class GameplayScreen extends ScreenAdapter {
         }
 
         updatePipePairs();
+        updateGround(delta);
         gameplayStage.act();
         gameplayStage.draw();
+    }
+
+    private void updateGround(float delta) {
+        groundPair.update();
     }
 
     private void updatePipePairs() {
