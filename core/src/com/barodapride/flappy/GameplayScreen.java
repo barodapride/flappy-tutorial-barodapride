@@ -1,5 +1,8 @@
 package com.barodapride.flappy;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +24,8 @@ public class GameplayScreen extends ScreenAdapter {
     private Image background;
     private Image ground;
 
+    private boolean justTouched;
+
     public GameplayScreen(FlappyGame game) {
         this.game = game;
         
@@ -37,10 +42,20 @@ public class GameplayScreen extends ScreenAdapter {
         gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
 
+        // Setup the input processor
+        initInputProcessor();
+
     }
+
 
     @Override
     public void render(float delta) {
+
+        if (justTouched){
+            bird.jump();
+            justTouched = false;
+        }
+
         gameplayStage.act();
         gameplayStage.draw();
     }
@@ -58,4 +73,18 @@ public class GameplayScreen extends ScreenAdapter {
     public void dispose() {
         gameplayStage.dispose();
     }
+
+    /**
+     * Tells libgdx to listen for inputs coming from the InputAdapter we give it
+     */
+    private void initInputProcessor() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                justTouched = true;
+                return false;
+            }
+        });
+    }
+
 }

@@ -2,6 +2,7 @@ package com.barodapride.flappy;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -11,10 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  */
 public class Bird extends Actor {
 
-    public static final int WIDTH = 32;
+    public static final int WIDTH = 32; // pixels
     public static final int HEIGHT = 32;
 
-    public static final float GRAVITY = 30f;
+    public static final float GRAVITY = 780f; // pixels per second per second
+    public static final float JUMP_VELOCITY = 310f; // pixels per second
 
     // Actor keeps track of position so we just need to keep track of velocity and acceleration
     private Vector2 vel;
@@ -34,33 +36,53 @@ public class Bird extends Actor {
 
         vel = new Vector2(0, 0);
         accel = new Vector2(0, -GRAVITY);
+
+        // An actor's origin defines the center for rotation.
+        setOrigin(Align.center);
+    }
+
+    public void jump() {
+        vel.y = JUMP_VELOCITY;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
+        switch (state){
+            case alive:
+                actAlive(delta);
+                break;
+            case dead:
+                vel = Vector2.Zero;
+                accel = Vector2.Zero;
+                break;
+        }
+    }
+
+    private void actAlive(float delta) {
         applyAccel(delta);
         updatePosition(delta);
 
+        setRotation(MathUtils.clamp(vel.y / JUMP_VELOCITY * 45f, -90, 45));
+
         if (isBelowGround()){
-            setX(FlappyGame.GROUND_LEVEL);
+            setY(FlappyGame.GROUND_LEVEL);
             state = State.dead;
         }
 
         if (isAboveCeiling()){
-            setX(FlappyGame.HEIGHT - getHeight());
+            setY(FlappyGame.HEIGHT - getHeight());
             state = State.dead;
         }
-
     }
 
     private boolean isAboveCeiling() {
-        return (getX(Align.top) >= FlappyGame.HEIGHT);
+        return (getY(Align.top) >= FlappyGame.HEIGHT);
     }
 
     private boolean isBelowGround() {
-        return (getX(Align.bottom) <= FlappyGame.GROUND_LEVEL);
+        return (getY(Align.bottom) <= FlappyGame.GROUND_LEVEL);
     }
 
     private void updatePosition(float delta) {
