@@ -21,6 +21,7 @@ public class GameplayScreen extends ScreenAdapter {
     private Stage gameplayStage;
 
     private Bird bird;
+    private Pipe pipe;
     private Image background;
     private Image ground;
 
@@ -35,16 +36,20 @@ public class GameplayScreen extends ScreenAdapter {
         bird = new Bird();
         bird.setPosition(FlappyGame.WIDTH*.25f, FlappyGame.HEIGHT/2, Align.center);
 
+        pipe = new Pipe();
+        pipe.setPosition(200, Utils.generateTopYPositionForABottomPipe(), Align.top);
+
         background = new Image(Assets.background);
         ground = new Image(Assets.ground);
 
+        // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(background);
         gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
+        gameplayStage.addActor(pipe);
 
         // Setup the input processor
         initInputProcessor();
-
     }
 
 
@@ -79,6 +84,7 @@ public class GameplayScreen extends ScreenAdapter {
      */
     private void initInputProcessor() {
         Gdx.input.setInputProcessor(new InputAdapter() {
+            // We only care about the touch down event
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 justTouched = true;
