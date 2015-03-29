@@ -25,7 +25,7 @@ public class Assets {
         atlas = new TextureAtlas("pack.atlas");
         batch = new SpriteBatch();
 
-        bird = atlas.findRegion("bird16x16");
+        bird = atlas.findRegion("bird-16x16");
         background = atlas.findRegion("background-300x480");
         ground = atlas.findRegion("ground-300x24");
         pipe = atlas.findRegion("pipe-64x400");
