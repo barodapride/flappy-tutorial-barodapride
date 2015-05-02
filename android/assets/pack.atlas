@@ -11,7 +11,7 @@ background-300x480
   orig: 300, 480
   offset: 0, 0
   index: -1
-bird16x16
+bird-16x16
   rotate: false
   xy: 304, 90
   size: 16, 16
