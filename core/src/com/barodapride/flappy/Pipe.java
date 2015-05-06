@@ -26,7 +26,7 @@ public class Pipe extends Actor {
 
     private State state;
 
-    private enum State { alive, dead };
+    public enum State { alive, dead }
 
     public Pipe() {
         region = new TextureRegion(Assets.pipe);
@@ -89,5 +89,13 @@ public class Pipe extends Actor {
 
     public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

@@ -116,10 +116,14 @@ public class GameplayScreen extends ScreenAdapter {
                 updateGround(delta);
                 gameplayStage.act();
                 checkCollisions();
+                if (bird.getState() == Bird.State.dead){
+                   stopTheWorld();
+                }
                 gameplayStage.draw();
                 break;
 
             case DEAD:
+                gameplayStage.act();
                 gameplayStage.draw();
                 break;
         }
@@ -127,17 +131,34 @@ public class GameplayScreen extends ScreenAdapter {
 
     private void checkCollisions() {
 
-        for (PipePair pair : pipePairs){
+        for (int i = 0; i < pipePairs.size; i++){
+            PipePair pair = pipePairs.get(i);
             if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())){
-                bird.die();
-                state = State.DEAD;
+                stopTheWorld();
             }
             if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())){
-                bird.die();
-                state = State.DEAD;
+                stopTheWorld();
             }
         }
 
+    }
+
+    private void stopTheWorld() {
+        bird.die();
+        killPipePairs();
+        stopTheGround();
+        state = State.DEAD;
+    }
+
+    private void stopTheGround() {
+        groundPair.stop();
+    }
+
+    private void killPipePairs() {
+        for (PipePair pair : pipePairs){
+            pair.getBottomPipe().setState(Pipe.State.dead);
+            pair.getTopPipe().setState(Pipe.State.dead);
+        }
     }
 
     private void updateGround(float delta) {

@@ -17,7 +17,7 @@ public class Ground extends Actor {
     public static final float MOVE_VELOCITY = 120f; // pixels per second
 
     // Actor keeps track of position so we just need to keep track of velocity and acceleration
-    private Vector2 vel;
+    public Vector2 vel;
 
     private TextureRegion region;
 

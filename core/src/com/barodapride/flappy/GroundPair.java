@@ -27,6 +27,13 @@ public class GroundPair {
         }
     }
 
+    public void stop(){
+
+        ground1.vel.x = 0;
+        ground2.vel.x = 0;
+
+    }
+
     public Ground getGround1() {
         return ground1;
     }
