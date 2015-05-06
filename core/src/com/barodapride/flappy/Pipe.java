@@ -3,6 +3,7 @@ package com.barodapride.flappy;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -16,6 +17,7 @@ public class Pipe extends Actor {
     public static final int HEIGHT = 400;
 
     public static final float MOVE_VELOCITY = 120f; // pixels per second
+    private Rectangle bounds;
 
     // Actor keeps track of position so we just need to keep track of velocity and acceleration
     private Vector2 vel;
@@ -34,6 +36,8 @@ public class Pipe extends Actor {
 
         vel = new Vector2(-MOVE_VELOCITY, 0);
 
+        bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+
         // An actor's origin defines the center for rotation.
         setOrigin(Align.center);
     }
@@ -50,6 +54,14 @@ public class Pipe extends Actor {
                 vel = Vector2.Zero;
                 break;
         }
+
+        updateBounds();
+
+    }
+
+    private void updateBounds() {
+        bounds.x = getX();
+        bounds.y = getY();
     }
 
     private void actAlive(float delta) {
@@ -69,5 +81,13 @@ public class Pipe extends Actor {
 
     public TextureRegion getRegion() {
         return region;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
     }
 }

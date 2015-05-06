@@ -35,6 +35,10 @@ public class GameplayScreen extends ScreenAdapter {
 
     private boolean justTouched;
 
+    private State state = State.PLAYING;
+
+    private enum State { PLAYING, DEAD };
+
     public GameplayScreen(FlappyGame game) {
         this.game = game;
         
@@ -102,16 +106,38 @@ public class GameplayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        switch (state){
+            case PLAYING:
+                if (justTouched){
+                    bird.jump();
+                    justTouched = false;
+                }
+                updatePipePairs();
+                updateGround(delta);
+                gameplayStage.act();
+                checkCollisions();
+                gameplayStage.draw();
+                break;
 
-        if (justTouched){
-            bird.jump();
-            justTouched = false;
+            case DEAD:
+                gameplayStage.draw();
+                break;
+        }
+    }
+
+    private void checkCollisions() {
+
+        for (PipePair pair : pipePairs){
+            if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())){
+                bird.die();
+                state = State.DEAD;
+            }
+            if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())){
+                bird.die();
+                state = State.DEAD;
+            }
         }
 
-        updatePipePairs();
-        updateGround(delta);
-        gameplayStage.act();
-        gameplayStage.draw();
     }
 
     private void updateGround(float delta) {

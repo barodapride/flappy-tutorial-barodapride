@@ -3,6 +3,7 @@ package com.barodapride.flappy;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -26,6 +27,8 @@ public class Bird extends Actor {
 
     private State state;
 
+    private Rectangle bounds;
+
     private enum State { alive, dead };
 
     public Bird() {
@@ -36,6 +39,8 @@ public class Bird extends Actor {
 
         vel = new Vector2(0, 0);
         accel = new Vector2(0, -GRAVITY);
+
+        bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 
         // An actor's origin defines the center for rotation.
         setOrigin(Align.center);
@@ -58,6 +63,13 @@ public class Bird extends Actor {
                 accel = Vector2.Zero;
                 break;
         }
+
+        updateBounds();
+    }
+
+    private void updateBounds() {
+        bounds.x = getX();
+        bounds.y = getY();
     }
 
     private void actAlive(float delta) {
@@ -68,12 +80,12 @@ public class Bird extends Actor {
 
         if (isBelowGround()){
             setY(FlappyGame.GROUND_LEVEL);
-            state = State.dead;
+            die();
         }
 
         if (isAboveCeiling()){
             setY(FlappyGame.HEIGHT - getHeight());
-            state = State.dead;
+            die();
         }
     }
 
@@ -100,4 +112,15 @@ public class Bird extends Actor {
                 getScaleY(), getRotation());
     }
 
+    public void die(){
+        state = State.dead;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
+    }
 }

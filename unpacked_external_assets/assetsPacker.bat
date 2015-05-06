@@ -1,1 +1,1 @@
-java -cp C:\dev\gdx.jar;C:\dev\gdx-tools.jar com.badlogic.gdx.tools.texturepacker.TexturePacker C:\dev\projects\flappy-tutorial-barodapride\unpacked_external_assets C:\dev\projects\flappy-tutorial-barodapride\android\assets 
+java -cp C:\dev\gdx.jar;C:\dev\gdx-tools.jar com.badlogic.gdx.tools.texturepacker.TexturePacker C:\dev\projects\flappy-tutorial-barodapride\unpacked_external_assets C:\dev\projects\flappy-tutorial-barodapride\android\assets
