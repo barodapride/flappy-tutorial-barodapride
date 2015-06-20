@@ -6,6 +6,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 /**
@@ -50,6 +54,16 @@ public class Bird extends Actor {
 
     public void jump() {
         vel.y = JUMP_VELOCITY;
+
+        clearActions();
+
+        RotateToAction a1 = Actions.rotateTo(35, .1f);
+        DelayAction da = Actions.delay(.50f);
+        RotateToAction a2 = Actions.rotateTo(-90, .3f);
+
+        SequenceAction sequenceAction = Actions.sequence(a1, da, a2);
+
+        addAction(sequenceAction);
     }
 
     @Override
@@ -57,10 +71,10 @@ public class Bird extends Actor {
         super.act(delta);
 
         time += delta;
-        region = Assets.birdAnimation.getKeyFrame(time);
 
         switch (state){
             case alive:
+                region = Assets.birdAnimation.getKeyFrame(time);
                 actAlive(delta);
                 break;
             case dead:
@@ -88,10 +102,9 @@ public class Bird extends Actor {
         applyAccel(delta);
         updatePosition(delta);
 
-        setRotation(MathUtils.clamp(vel.y / JUMP_VELOCITY * 45f, -90, 45));
-
         if (isBelowGround()){
             setY(FlappyGame.GROUND_LEVEL);
+            clearActions();
             die();
         }
 
@@ -125,8 +138,14 @@ public class Bird extends Actor {
     }
 
     public void die(){
+
         state = State.dead;
+
         vel.y = 0;
+
+        clearActions();
+        RotateToAction ra = Actions.rotateTo(-90, .15f);
+        addAction(ra);
     }
 
     public Rectangle getBounds() {

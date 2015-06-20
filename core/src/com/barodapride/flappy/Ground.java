@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  */
 public class Ground extends Actor {
 
-    public static final int WIDTH = 300; // pixels
-    public static final int HEIGHT = 24;
+    public static final float WIDTH = 321f; // pixels
+    public static final float HEIGHT = 24f;
 
     public static final float MOVE_VELOCITY = 120f; // pixels per second
 
@@ -22,6 +22,8 @@ public class Ground extends Actor {
     private TextureRegion region;
 
     private State state;
+
+
 
     private enum State { alive, dead };
 
@@ -53,11 +55,13 @@ public class Ground extends Actor {
 
     private void actAlive(float delta) {
         updatePosition(delta);
+        if (getX() <= -21f){
+            setX(getX() + 21f);
+        }
     }
 
     private void updatePosition(float delta) {
         setX(getX() + vel.x * delta);
-        setY(getY() + vel.y * delta);
     }
 
     @Override

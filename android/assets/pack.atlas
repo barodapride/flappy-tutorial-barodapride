@@ -13,30 +13,30 @@ background-300x480
   index: -1
 bird-16x16
   rotate: false
-  xy: 304, 90
+  xy: 370, 492
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird2-16x16
   rotate: false
-  xy: 370, 492
+  xy: 304, 90
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird3-16x16
   rotate: false
-  xy: 304, 72
+  xy: 370, 474
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-ground-300x24
+ground-321x24
   rotate: false
   xy: 2, 2
-  size: 300, 24
-  orig: 300, 24
+  size: 321, 24
+  orig: 321, 24
   offset: 0, 0
   index: -1
 pipe-64x400

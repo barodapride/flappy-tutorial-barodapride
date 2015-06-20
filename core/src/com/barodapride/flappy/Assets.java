@@ -37,7 +37,7 @@ public class Assets {
         bird3 = atlas.findRegion("bird3-16x16");
 
         background = atlas.findRegion("background-300x480");
-        ground = atlas.findRegion("ground-300x24");
+        ground = atlas.findRegion("ground-321x24");
         pipe = atlas.findRegion("pipe-64x400");
 
 

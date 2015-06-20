@@ -29,9 +29,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     private Image background;
 
-    private Ground ground1;
-    private Ground ground2;
-    private GroundPair groundPair;
+    private Ground ground;
 
     private boolean justTouched;
 
@@ -55,16 +53,14 @@ public class GameplayScreen extends ScreenAdapter {
         initThirdSetOfPipes();
 
         background = new Image(Assets.background);
-        ground1 = new Ground();
-        ground2 = new Ground();
-        ground2.setPosition(FlappyGame.WIDTH, 0);
-        groundPair = new GroundPair(ground1, ground2);
+        ground = new Ground();
+        ground.setPosition(0, 0);
+
 
         // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(background);
         addPipes(gameplayStage);
-        gameplayStage.addActor(ground1);
-        gameplayStage.addActor(ground2);
+        gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
 
         // Setup the input processor
@@ -113,7 +109,6 @@ public class GameplayScreen extends ScreenAdapter {
                     justTouched = false;
                 }
                 updatePipePairs();
-                updateGround(delta);
                 gameplayStage.act();
                 checkCollisions();
                 if (bird.getState() == Bird.State.dead){
@@ -151,7 +146,7 @@ public class GameplayScreen extends ScreenAdapter {
     }
 
     private void stopTheGround() {
-        groundPair.stop();
+        ground.vel.x = 0;
     }
 
     private void killPipePairs() {
@@ -161,9 +156,7 @@ public class GameplayScreen extends ScreenAdapter {
         }
     }
 
-    private void updateGround(float delta) {
-        groundPair.update();
-    }
+
 
     private void updatePipePairs() {
         for (int i = 0; i < pipePairs.size; i++) {
