@@ -24,6 +24,7 @@ public class Bird extends Actor {
     private Vector2 accel;
 
     private TextureRegion region;
+    private float time;
 
 
     private Rectangle bounds;
@@ -54,6 +55,9 @@ public class Bird extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        time += delta;
+        region = Assets.birdAnimation.getKeyFrame(time);
 
         switch (state){
             case alive:

@@ -62,10 +62,10 @@ public class GameplayScreen extends ScreenAdapter {
 
         // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(background);
-        gameplayStage.addActor(bird);
         addPipes(gameplayStage);
         gameplayStage.addActor(ground1);
         gameplayStage.addActor(ground2);
+        gameplayStage.addActor(bird);
 
         // Setup the input processor
         initInputProcessor();
