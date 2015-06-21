@@ -3,8 +3,10 @@ package com.barodapride.flappy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -36,7 +38,9 @@ public class MainMenuScreen extends ScreenAdapter {
         background.setPosition(0,0);
 
         title = new Image(Assets.title);
-        title.setPosition(FlappyGame.WIDTH/2, FlappyGame.HEIGHT, Align.top);
+        title.setPosition(FlappyGame.WIDTH/2, FlappyGame.HEIGHT - 50f, Align.top);
+        title.setOrigin(Align.center);
+        title.addAction(Actions.forever(Actions.sequence(Actions.scaleTo(1.2f, 1.2f, 1f, Interpolation.fade), Actions.scaleTo(1,1,1, Interpolation.fade))));
 
         initPlayButton();
 
@@ -68,4 +72,10 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.draw();
     }
 
+    @Override
+    public void show() {
+        playButton.clearActions();
+        playButton.addAction(Actions.moveBy(0, -100f));
+        playButton.addAction(Actions.moveBy(0, 100f, 1f, Interpolation.sine));
+    }
 }
