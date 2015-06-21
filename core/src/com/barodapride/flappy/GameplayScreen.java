@@ -3,9 +3,11 @@ package com.barodapride.flappy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -23,6 +25,10 @@ public class GameplayScreen extends ScreenAdapter {
     protected FlappyGame game;
 
     private Stage gameplayStage;
+    private Stage uiStage;
+
+    private Label scoreLabel;
+    private int score;
 
     private Bird bird;
     private Array<PipePair> pipePairs;
@@ -42,9 +48,14 @@ public class GameplayScreen extends ScreenAdapter {
         
         camera = new OrthographicCamera(FlappyGame.WIDTH, FlappyGame.HEIGHT);
         gameplayStage = new Stage(new StretchViewport(FlappyGame.WIDTH, FlappyGame.HEIGHT, camera));
+        uiStage = new Stage(new StretchViewport(FlappyGame.WIDTH, FlappyGame.HEIGHT));
 
         bird = new Bird();
         bird.setPosition(FlappyGame.WIDTH * .25f, FlappyGame.HEIGHT / 2, Align.center);
+
+        scoreLabel = new Label("0", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
+        scoreLabel.setPosition(FlappyGame.WIDTH/2, FlappyGame.HEIGHT * .9f, Align.center);
+        uiStage.addActor(scoreLabel);
 
         pipePairs = new Array<PipePair>();
 
@@ -110,16 +121,20 @@ public class GameplayScreen extends ScreenAdapter {
                 }
                 updatePipePairs();
                 gameplayStage.act();
+                uiStage.act();
                 checkCollisions();
                 if (bird.getState() == Bird.State.dead){
                    stopTheWorld();
                 }
                 gameplayStage.draw();
+                uiStage.draw();
                 break;
 
             case DEAD:
                 gameplayStage.act();
                 gameplayStage.draw();
+                uiStage.act();
+                uiStage.draw();
                 break;
         }
     }
@@ -134,8 +149,18 @@ public class GameplayScreen extends ScreenAdapter {
             if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())){
                 stopTheWorld();
             }
+            if (pair.getCoin().getBounds().overlaps(bird.getBounds())){
+                score++;
+                updateScoreLabel();
+                pair.moveCoinOffscreen();
+            }
         }
 
+    }
+
+    private void updateScoreLabel() {
+        scoreLabel.setText(String.valueOf(score));
+        // TODO: center the label according to width
     }
 
     private void stopTheWorld() {
@@ -153,6 +178,7 @@ public class GameplayScreen extends ScreenAdapter {
         for (PipePair pair : pipePairs){
             pair.getBottomPipe().setState(Pipe.State.dead);
             pair.getTopPipe().setState(Pipe.State.dead);
+            pair.getCoin().setVel(0,0);
         }
     }
 
@@ -170,18 +196,21 @@ public class GameplayScreen extends ScreenAdapter {
         camera.setToOrtho(false, width, height);
         Assets.batch.setProjectionMatrix(camera.combined);
         gameplayStage.getViewport().update(width, height, true);
+        uiStage.getViewport().update(width, height, true);
 
     }
 
     @Override
     public void dispose() {
         gameplayStage.dispose();
+        uiStage.dispose();
     }
 
     private void addPipes(Stage gameplayStage) {
         for (int i = 0; i < pipePairs.size; i++) {
             gameplayStage.addActor(pipePairs.get(i).getBottomPipe());
             gameplayStage.addActor(pipePairs.get(i).getTopPipe());
+            gameplayStage.addActor(pipePairs.get(i).getCoin());
         }
     }
 

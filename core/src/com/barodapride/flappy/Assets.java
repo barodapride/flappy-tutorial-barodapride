@@ -1,9 +1,7 @@
 package com.barodapride.flappy;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -14,6 +12,8 @@ public class Assets {
     // Disposeables
     public static TextureAtlas atlas;
     public static SpriteBatch batch;
+    public static BitmapFont fontMedium;
+
 
 
     // Non-Disposeables
@@ -31,6 +31,8 @@ public class Assets {
 
         atlas = new TextureAtlas("pack.atlas");
         batch = new SpriteBatch();
+
+        fontMedium = new BitmapFont(Gdx.files.internal("font/font.fnt"), Gdx.files.internal("font/font_0.png"), false);
 
         bird = atlas.findRegion("bird-16x16");
         bird2 = atlas.findRegion("bird2-16x16");
@@ -54,6 +56,8 @@ public class Assets {
         if (batch != null) {
             batch.dispose();
         }
+
+        fontMedium.dispose();
     }
 
 }
