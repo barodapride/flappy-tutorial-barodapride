@@ -23,6 +23,9 @@ public class Assets {
     public static TextureRegion background;
     public static TextureRegion ground;
     public static TextureRegion pipe;
+    public static TextureRegion title;
+    public static TextureRegion playDown;
+    public static TextureRegion playUp;
 
     // Animations
     public static Animation birdAnimation;
@@ -41,6 +44,9 @@ public class Assets {
         background = atlas.findRegion("background-300x480");
         ground = atlas.findRegion("ground-321x24");
         pipe = atlas.findRegion("pipe-64x400");
+        title = atlas.findRegion("title");
+        playDown = atlas.findRegion("play_down");
+        playUp = atlas.findRegion("play_up");
 
 
         birdAnimation = new Animation(.1f, bird, bird2, bird3);

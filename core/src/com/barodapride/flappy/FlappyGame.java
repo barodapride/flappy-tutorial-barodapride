@@ -16,7 +16,8 @@ public class FlappyGame extends Game {
 	@Override
 	public void create () {
         Assets.load();
-		setScreen(new GameplayScreen(this));
+//		setScreen(new GameplayScreen(this));
+        setScreen(new MainMenuScreen(this));
 	}
 
     @Override

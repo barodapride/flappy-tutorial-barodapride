@@ -1,6 +1,6 @@
 
 pack.png
-size: 512,512
+size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,28 +13,28 @@ background-300x480
   index: -1
 bird-16x16
   rotate: false
-  xy: 370, 492
+  xy: 370, 290
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird2-16x16
   rotate: false
-  xy: 304, 90
+  xy: 572, 466
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird3-16x16
   rotate: false
-  xy: 370, 474
+  xy: 895, 492
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ground-321x24
   rotate: false
-  xy: 2, 2
+  xy: 572, 484
   size: 321, 24
   orig: 321, 24
   offset: 0, 0
@@ -44,5 +44,26 @@ pipe-64x400
   xy: 304, 108
   size: 64, 400
   orig: 64, 400
+  offset: 0, 0
+  index: -1
+play_down
+  rotate: false
+  xy: 2, 2
+  size: 48, 24
+  orig: 48, 24
+  offset: 0, 0
+  index: -1
+play_up
+  rotate: false
+  xy: 304, 82
+  size: 48, 24
+  orig: 48, 24
+  offset: 0, 0
+  index: -1
+title
+  rotate: false
+  xy: 370, 308
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
