@@ -35,7 +35,7 @@ public class Bird extends Actor {
 
     private State state;
 
-    public enum State { alive, dead }
+    public enum State { alive, dying, dead}
 
     public Bird() {
         region = new TextureRegion(Assets.bird);
@@ -78,6 +78,7 @@ public class Bird extends Actor {
                 actAlive(delta);
                 break;
             case dead:
+            case dying:
                 vel.x = 0;
                 accel.y = -GRAVITY;
 
@@ -86,6 +87,7 @@ public class Bird extends Actor {
 
                 if (isBelowGround()) {
                     setY(FlappyGame.GROUND_LEVEL);
+                    setState(State.dead);
                 }
                 break;
         }
@@ -139,7 +141,7 @@ public class Bird extends Actor {
 
     public void die(){
 
-        state = State.dead;
+        state = State.dying;
 
         vel.y = 0;
 
