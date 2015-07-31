@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  */
 public class Ground extends Actor {
 
-    public static final float WIDTH = 321f; // pixels
-    public static final float HEIGHT = 24f;
+    public static final float WIDTH = 320f; // pixels
+    public static final float HEIGHT = 96f;
 
     public static final float MOVE_VELOCITY = 120f; // pixels per second
 

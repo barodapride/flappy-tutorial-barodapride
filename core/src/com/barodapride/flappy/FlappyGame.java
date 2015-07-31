@@ -11,7 +11,7 @@ public class FlappyGame extends Game {
 
     public static final int WIDTH = 300;
     public static final int HEIGHT = 480;
-    public static final int GROUND_LEVEL = 24;
+    public static final int GROUND_LEVEL = 96;
 
 	@Override
 	public void create () {

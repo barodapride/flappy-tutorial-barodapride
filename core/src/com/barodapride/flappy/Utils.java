@@ -9,6 +9,6 @@ public class Utils {
 
 
     public static float getRandomYOpening(){
-        return MathUtils.random(FlappyGame.HEIGHT * .15f, FlappyGame.HEIGHT * .85f);
+        return MathUtils.random(96 + 24, FlappyGame.HEIGHT * .85f);
     }
 }

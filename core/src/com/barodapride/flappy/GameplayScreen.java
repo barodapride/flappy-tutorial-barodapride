@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,7 +21,6 @@ public class GameplayScreen extends ScreenAdapter {
 
     public static final float PIPE_SPACING = 200f;
     public static final int PIPE_SETS = 3;
-
 
     protected OrthographicCamera camera;
     protected FlappyGame game;
@@ -133,7 +133,7 @@ public class GameplayScreen extends ScreenAdapter {
                 checkCollisions();
                 if (bird.getState() == Bird.State.dying) {
                     stopTheWorld();
-                    tapToRetry.addAction(Actions.moveBy(0, 200, .5f));
+                    tapToRetry.addAction(Actions.delay(1f, Actions.moveBy(0f, 250f, 2f, Interpolation.sine)));
                     state = State.DYING;
                 }
                 gameplayStage.draw();
@@ -151,6 +151,7 @@ public class GameplayScreen extends ScreenAdapter {
                 uiStage.draw();
                 break;
         }
+
     }
 
     private void checkCollisions() {

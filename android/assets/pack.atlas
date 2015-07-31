@@ -13,37 +13,58 @@ background-300x480
   index: -1
 bird-16x16
   rotate: false
-  xy: 370, 290
+  xy: 304, 192
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird2-16x16
   rotate: false
-  xy: 572, 466
+  xy: 540, 394
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bird3-16x16
   rotate: false
-  xy: 895, 492
+  xy: 52, 10
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-ground-321x24
+ground-321x96
   rotate: false
-  xy: 572, 484
-  size: 321, 24
-  orig: 321, 24
+  xy: 304, 412
+  size: 321, 96
+  orig: 321, 96
   offset: 0, 0
   index: -1
-pipe-64x400
+peng
   rotate: false
-  xy: 304, 108
-  size: 64, 400
-  orig: 64, 400
+  xy: 627, 466
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+peng2
+  rotate: false
+  xy: 677, 492
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+peng3
+  rotate: false
+  xy: 304, 174
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+pipe-32x200
+  rotate: false
+  xy: 506, 210
+  size: 32, 200
+  orig: 32, 200
   offset: 0, 0
   index: -1
 play_down
@@ -55,14 +76,14 @@ play_down
   index: -1
 play_up
   rotate: false
-  xy: 304, 82
+  xy: 627, 484
   size: 48, 24
   orig: 48, 24
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 370, 308
+  xy: 304, 210
   size: 200, 200
   orig: 200, 200
   offset: 0, 0

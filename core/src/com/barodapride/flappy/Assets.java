@@ -37,13 +37,13 @@ public class Assets {
 
         fontMedium = new BitmapFont(Gdx.files.internal("font/font.fnt"), Gdx.files.internal("font/font_0.png"), false);
 
-        bird = atlas.findRegion("bird-16x16");
-        bird2 = atlas.findRegion("bird2-16x16");
-        bird3 = atlas.findRegion("bird3-16x16");
+        bird = atlas.findRegion("peng");
+        bird2 = atlas.findRegion("peng2");
+        bird3 = atlas.findRegion("peng3");
 
         background = atlas.findRegion("background-300x480");
-        ground = atlas.findRegion("ground-321x24");
-        pipe = atlas.findRegion("pipe-64x400");
+        ground = atlas.findRegion("ground-321x96");
+        pipe = atlas.findRegion("pipe-32x200");
         title = atlas.findRegion("title");
         playDown = atlas.findRegion("play_down");
         playUp = atlas.findRegion("play_up");
