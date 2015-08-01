@@ -7,12 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
-/**
- * Created by Mike on 3/20/2015.
- */
 public class Bird extends Actor {
 
-    public static final int WIDTH = 32; // pixels
+    public static final int WIDTH = 32; // 32 pixels wide
     public static final int HEIGHT = 32;
 
     public static final float GRAVITY = 920f; // pixels per second per second
@@ -25,18 +22,17 @@ public class Bird extends Actor {
     private TextureRegion region;
     private float time;
 
-
     private Rectangle bounds;
 
     private State state;
 
-    public enum State { alive, dying, dead}
+    public enum State { PREGAME, ALIVE, DYING, DEAD }
 
     public Bird() {
         region = new TextureRegion(Assets.bird);
         setWidth(WIDTH);
         setHeight(HEIGHT);
-        state = State.alive;
+        state = State.ALIVE;
 
         vel = new Vector2(0, 0);
         accel = new Vector2(0, -GRAVITY);
@@ -54,30 +50,35 @@ public class Bird extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
         time += delta;
 
         switch (state){
-            case alive:
+            case PREGAME:
                 region = Assets.birdAnimation.getKeyFrame(time);
+                break;
+            case ALIVE:
                 actAlive(delta);
                 break;
-            case dead:
-            case dying:
-                vel.x = 0;
-                accel.y = -GRAVITY;
-
-                applyAccel(delta);
-                updatePosition(delta);
-
-                if (isBelowGround()) {
-                    setY(FlappyGame.GROUND_LEVEL);
-                    setState(State.dead);
-                }
+            case DEAD:
+            case DYING:
+                actDying(delta);
                 break;
         }
 
         updateBounds();
+    }
+
+    private void actDying(float delta) {
+        vel.x = 0;
+        accel.y = -GRAVITY;
+
+        applyAccel(delta);
+        updatePosition(delta);
+
+        if (isBelowGround()) {
+            setY(FlappyGame.GROUND_LEVEL);
+            setState(State.DEAD);
+        }
     }
 
     private void updateBounds() {
@@ -86,18 +87,19 @@ public class Bird extends Actor {
     }
 
     private void actAlive(float delta) {
+        region = Assets.birdAnimation.getKeyFrame(time);
         applyAccel(delta);
         updatePosition(delta);
 
         if (isBelowGround()){
             setY(FlappyGame.GROUND_LEVEL);
             clearActions();
-            die();
+            setToDying();
         }
 
         if (isAboveCeiling()){
             setY(FlappyGame.HEIGHT - getHeight());
-            die();
+            setToDying();
         }
     }
 
@@ -124,10 +126,8 @@ public class Bird extends Actor {
                 getScaleY(), getRotation());
     }
 
-    public void die() {
-
-        state = State.dying;
-
+    public void setToDying() {
+        state = State.DYING;
         vel.y = 0;
     }
 

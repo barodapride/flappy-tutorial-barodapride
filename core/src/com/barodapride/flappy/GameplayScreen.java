@@ -14,9 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-/**
- * Created by Mike on 3/20/2015.
- */
 public class GameplayScreen extends ScreenAdapter {
 
     public static final float PIPE_SPACING = 200f;
@@ -30,6 +27,8 @@ public class GameplayScreen extends ScreenAdapter {
 
     private Label scoreLabel;
     private Label tapToRetry;
+    private Label tapToFlap;
+
     private int score;
 
     private Bird bird;
@@ -41,9 +40,9 @@ public class GameplayScreen extends ScreenAdapter {
 
     private boolean justTouched;
 
-    private State state = State.PLAYING;
+    private State screenState = State.PREGAME;
 
-    private enum State {PLAYING, DYING, DEAD}
+    private enum State {PREGAME, PLAYING, DYING, DEAD}
 
     ;
 
@@ -56,6 +55,8 @@ public class GameplayScreen extends ScreenAdapter {
 
         bird = new Bird();
         bird.setPosition(FlappyGame.WIDTH * .25f, FlappyGame.HEIGHT / 2, Align.center);
+        bird.addAction(Utils.getFloatyAction());
+        bird.setState(Bird.State.PREGAME);
 
         scoreLabel = new Label("0", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
         scoreLabel.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * .9f, Align.center);
@@ -65,11 +66,11 @@ public class GameplayScreen extends ScreenAdapter {
         tapToRetry.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * .2f, Align.center);
         uiStage.addActor(tapToRetry);
 
-        pipePairs = new Array<PipePair>();
+        tapToFlap = new Label("Tap To Flap!", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
+        tapToFlap.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * 1.25f, Align.center);
+        uiStage.addActor(tapToFlap);
 
-        initFirstSetOfPipes();
-        initSecondSetOfPipes();
-        initThirdSetOfPipes();
+        pipePairs = new Array<PipePair>();
 
         background = new Image(Assets.background);
         ground = new Ground();
@@ -78,12 +79,143 @@ public class GameplayScreen extends ScreenAdapter {
 
         // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(background);
-        addPipes(gameplayStage);
         gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
 
         // Setup the input processor
         initInputProcessor();
+    }
+
+
+    @Override
+    public void show() {
+        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y + 100f, Align.center, 1f, Interpolation.sine));
+        tapToRetry.addAction(Actions.moveBy(0, -200f));
+
+    }
+
+    @Override
+    public void render(float delta) {
+        switch (screenState) {
+            case PREGAME:
+                updateAndDrawStages();
+                break;
+            case PLAYING:
+                renderPlaying();
+                break;
+            case DYING:
+            case DEAD:
+                renderDeadOrDying();
+                break;
+        }
+    }
+
+    private void renderDeadOrDying() {
+        if (bird.getState() == Bird.State.DEAD) {
+            screenState = State.DEAD;
+        }
+        updateAndDrawStages();
+    }
+
+    private void renderPlaying() {
+        if (justTouched) {
+            bird.jump();
+            justTouched = false;
+        }
+        updatePipePairs();
+        gameplayStage.act();
+        uiStage.act();
+        checkCollisions();
+        if (bird.getState() == Bird.State.DYING) {
+            stopTheWorld();
+            tapToRetry.addAction(Actions.delay(1f, Actions.moveBy(0f, 250f, 2f, Interpolation.sine)));
+            screenState = State.DYING;
+        }
+        gameplayStage.draw();
+        uiStage.draw();
+    }
+
+    private void updateAndDrawStages() {
+        gameplayStage.act();
+        gameplayStage.draw();
+        uiStage.act();
+        uiStage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+        camera.setToOrtho(false, width, height);
+        Assets.batch.setProjectionMatrix(camera.combined);
+        gameplayStage.getViewport().update(width, height, true);
+        uiStage.getViewport().update(width, height, true);
+
+    }
+
+    @Override
+    public void dispose() {
+        gameplayStage.dispose();
+        uiStage.dispose();
+    }
+
+
+    private void checkCollisions() {
+
+        for (int i = 0; i < pipePairs.size; i++) {
+            PipePair pair = pipePairs.get(i);
+            if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())) {
+                stopTheWorld();
+            }
+            if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())) {
+                stopTheWorld();
+            }
+            if (pair.getCoin().getBounds().overlaps(bird.getBounds())) {
+                score++;
+                updateScoreLabel();
+                pair.moveCoinOffscreen();
+            }
+        }
+
+    }
+
+    private void updateScoreLabel() {
+        scoreLabel.setText(String.valueOf(score));
+        // TODO: center the label according to width
+    }
+
+    private void stopTheWorld() {
+        bird.setToDying();
+        killPipePairs();
+        stopTheGround();
+        screenState = State.DYING;
+    }
+
+    private void stopTheGround() {
+        ground.vel.x = 0;
+    }
+
+    private void killPipePairs() {
+        for (PipePair pair : pipePairs) {
+            pair.getBottomPipe().setState(Pipe.State.dead);
+            pair.getTopPipe().setState(Pipe.State.dead);
+            pair.getCoin().setVel(0, 0);
+        }
+    }
+
+
+    private void updatePipePairs() {
+        for (int i = 0; i < pipePairs.size; i++) {
+            pipePairs.get(i).update();
+        }
+    }
+
+
+    private void addPipes(Stage gameplayStage) {
+        for (int i = 0; i < pipePairs.size; i++) {
+            gameplayStage.addActor(pipePairs.get(i).getBottomPipe());
+            gameplayStage.addActor(pipePairs.get(i).getTopPipe());
+            gameplayStage.addActor(pipePairs.get(i).getCoin());
+        }
     }
 
     private void initThirdSetOfPipes() {
@@ -119,115 +251,6 @@ public class GameplayScreen extends ScreenAdapter {
         pipePairs.add(pair);
     }
 
-    @Override
-    public void render(float delta) {
-        switch (state) {
-            case PLAYING:
-                if (justTouched) {
-                    bird.jump();
-                    justTouched = false;
-                }
-                updatePipePairs();
-                gameplayStage.act();
-                uiStage.act();
-                checkCollisions();
-                if (bird.getState() == Bird.State.dying) {
-                    stopTheWorld();
-                    tapToRetry.addAction(Actions.delay(1f, Actions.moveBy(0f, 250f, 2f, Interpolation.sine)));
-                    state = State.DYING;
-                }
-                gameplayStage.draw();
-                uiStage.draw();
-                break;
-
-            case DEAD:
-            case DYING:
-                if (bird.getState() == Bird.State.dead) {
-                    state = State.DEAD;
-                }
-                gameplayStage.act();
-                gameplayStage.draw();
-                uiStage.act();
-                uiStage.draw();
-                break;
-        }
-
-    }
-
-    private void checkCollisions() {
-
-        for (int i = 0; i < pipePairs.size; i++) {
-            PipePair pair = pipePairs.get(i);
-            if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())) {
-                stopTheWorld();
-            }
-            if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())) {
-                stopTheWorld();
-            }
-            if (pair.getCoin().getBounds().overlaps(bird.getBounds())) {
-                score++;
-                updateScoreLabel();
-                pair.moveCoinOffscreen();
-            }
-        }
-
-    }
-
-    private void updateScoreLabel() {
-        scoreLabel.setText(String.valueOf(score));
-        // TODO: center the label according to width
-    }
-
-    private void stopTheWorld() {
-        bird.die();
-        killPipePairs();
-        stopTheGround();
-        state = State.DYING;
-    }
-
-    private void stopTheGround() {
-        ground.vel.x = 0;
-    }
-
-    private void killPipePairs() {
-        for (PipePair pair : pipePairs) {
-            pair.getBottomPipe().setState(Pipe.State.dead);
-            pair.getTopPipe().setState(Pipe.State.dead);
-            pair.getCoin().setVel(0, 0);
-        }
-    }
-
-
-    private void updatePipePairs() {
-        for (int i = 0; i < pipePairs.size; i++) {
-            pipePairs.get(i).update();
-        }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-        camera.setToOrtho(false, width, height);
-        Assets.batch.setProjectionMatrix(camera.combined);
-        gameplayStage.getViewport().update(width, height, true);
-        uiStage.getViewport().update(width, height, true);
-
-    }
-
-    @Override
-    public void dispose() {
-        gameplayStage.dispose();
-        uiStage.dispose();
-    }
-
-    private void addPipes(Stage gameplayStage) {
-        for (int i = 0; i < pipePairs.size; i++) {
-            gameplayStage.addActor(pipePairs.get(i).getBottomPipe());
-            gameplayStage.addActor(pipePairs.get(i).getTopPipe());
-            gameplayStage.addActor(pipePairs.get(i).getCoin());
-        }
-    }
-
     /**
      * Tells libgdx to listen for inputs coming from the InputAdapter we give it
      */
@@ -237,25 +260,40 @@ public class GameplayScreen extends ScreenAdapter {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-                if (state == State.DYING) {
-                    return true;
-                }
+                switch(screenState){
 
-                if (state == State.DEAD) {
-                    game.setScreen(new GameplayScreen(game));
-                    return true;
-                }
+                    case DYING:
+                        justTouched = true;
+                        break;
 
-                justTouched = true;
+                    case DEAD:
+                        game.setScreen(new GameplayScreen(game));
+                        justTouched = true;
+                        break;
+
+                    case PLAYING:
+                        justTouched = true;
+                        break;
+
+                    case PREGAME:
+                        justTouched = true;
+                        screenState = State.PLAYING;
+                        bird.setState(Bird.State.ALIVE);
+                        bird.clearActions();
+                        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.HEIGHT * 1.25f, Align.center, 1f, Interpolation.sine));
+                        initFirstSetOfPipes();
+                        initSecondSetOfPipes();
+                        initThirdSetOfPipes();
+                        addPipes(gameplayStage);
+                        gameplayStage.addActor(ground);
+                        gameplayStage.addActor(bird);
+                        break;
+
+                }
                 return true;
             }
         });
     }
 
-    @Override
-    public void show() {
 
-        tapToRetry.addAction(Actions.moveBy(0, -200f));
-
-    }
 }
