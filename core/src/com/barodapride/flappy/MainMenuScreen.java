@@ -3,6 +3,8 @@ package com.barodapride.flappy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -20,33 +23,24 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
 
-
     private FlappyGame game;
     private Stage stage;
 
-    private Image title;
-    private Image background;
+    private Label titleLabel;
     private Button playButton;
-
 
     public MainMenuScreen(FlappyGame game) {
 
         this.game = game;
         stage = new Stage(new StretchViewport(FlappyGame.WIDTH, FlappyGame.HEIGHT));
 
-        background = new Image(Assets.background);
-        background.setPosition(0,0);
-
-        title = new Image(Assets.title);
-        title.setPosition(FlappyGame.WIDTH/2, FlappyGame.HEIGHT - 50f, Align.top);
-        title.setOrigin(Align.center);
-        title.addAction(Actions.forever(Actions.sequence(Actions.scaleTo(1.2f, 1.2f, 1f, Interpolation.fade), Actions.scaleTo(1,1,1, Interpolation.fade))));
-
         initPlayButton();
 
-        stage.addActor(background);
+        titleLabel = new Label("Bird vs. Pipe", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
+        titleLabel.setPosition(FlappyGame.CENTER_X, FlappyGame.HEIGHT *.75f, Align.center);
+
         stage.addActor(playButton);
-        stage.addActor(title);
+        stage.addActor(titleLabel);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -68,6 +62,10 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+
+        Gdx.graphics.getGL20().glClearColor(Utils.MAIN_MENU_BACKGROUND_COLOR.r, Utils.MAIN_MENU_BACKGROUND_COLOR.g, Utils.MAIN_MENU_BACKGROUND_COLOR.b, 1f);
+        Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
         stage.act();
         stage.draw();
     }

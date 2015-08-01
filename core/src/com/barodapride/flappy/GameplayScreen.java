@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,16 +30,18 @@ public class GameplayScreen extends ScreenAdapter {
     private Label tapToRetry;
     private Label tapToFlap;
 
+    private Image whitePixel;
+
     private int score;
 
     private Bird bird;
     private Array<PipePair> pipePairs;
 
-    private Image background;
-
     private Ground ground;
 
     private boolean justTouched;
+
+    private Color backgroundColor;
 
     private State screenState = State.PREGAME;
 
@@ -58,6 +61,8 @@ public class GameplayScreen extends ScreenAdapter {
         bird.addAction(Utils.getFloatyAction());
         bird.setState(Bird.State.PREGAME);
 
+        whitePixel = new Image(Assets.whitePixel);
+
         scoreLabel = new Label("0", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
         scoreLabel.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * .9f, Align.center);
         uiStage.addActor(scoreLabel);
@@ -72,13 +77,12 @@ public class GameplayScreen extends ScreenAdapter {
 
         pipePairs = new Array<PipePair>();
 
-        background = new Image(Assets.background);
         ground = new Ground();
         ground.setPosition(0, 0);
 
+        backgroundColor = Utils.getRandomBackgroundColor();
 
         // The order actors are added determines the order they are drawn so make sure the background is first
-        gameplayStage.addActor(background);
         gameplayStage.addActor(ground);
         gameplayStage.addActor(bird);
 
@@ -96,6 +100,10 @@ public class GameplayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+
+        Gdx.graphics.getGL20().glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1f);
+        Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
         switch (screenState) {
             case PREGAME:
                 updateAndDrawStages();
@@ -165,17 +173,29 @@ public class GameplayScreen extends ScreenAdapter {
             PipePair pair = pipePairs.get(i);
             if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())) {
                 stopTheWorld();
+                showWhiteScreen();
             }
             if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())) {
                 stopTheWorld();
+                showWhiteScreen();
             }
-            if (pair.getCoin().getBounds().overlaps(bird.getBounds())) {
+            if (pair.getRuby().getBounds().overlaps(bird.getBounds())) {
                 score++;
                 updateScoreLabel();
                 pair.moveCoinOffscreen();
+                Assets.playBingSound();
             }
         }
 
+    }
+
+    private void showWhiteScreen() {
+        whitePixel.setWidth(FlappyGame.WIDTH);
+        whitePixel.setHeight(FlappyGame.HEIGHT);
+
+        gameplayStage.addActor(whitePixel);
+
+        whitePixel.addAction(Actions.fadeOut(.5f));
     }
 
     private void updateScoreLabel() {
@@ -198,7 +218,7 @@ public class GameplayScreen extends ScreenAdapter {
         for (PipePair pair : pipePairs) {
             pair.getBottomPipe().setState(Pipe.State.dead);
             pair.getTopPipe().setState(Pipe.State.dead);
-            pair.getCoin().setVel(0, 0);
+            pair.getRuby().setVel(0, 0);
         }
     }
 
@@ -214,7 +234,7 @@ public class GameplayScreen extends ScreenAdapter {
         for (int i = 0; i < pipePairs.size; i++) {
             gameplayStage.addActor(pipePairs.get(i).getBottomPipe());
             gameplayStage.addActor(pipePairs.get(i).getTopPipe());
-            gameplayStage.addActor(pipePairs.get(i).getCoin());
+            gameplayStage.addActor(pipePairs.get(i).getRuby());
         }
     }
 

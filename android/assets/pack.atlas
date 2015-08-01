@@ -1,90 +1,104 @@
 
 pack.png
-size: 1024,512
+size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-background-300x480
-  rotate: false
-  xy: 2, 28
-  size: 300, 480
-  orig: 300, 480
-  offset: 0, 0
-  index: -1
-bird-16x16
-  rotate: false
-  xy: 304, 192
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
-bird2-16x16
-  rotate: false
-  xy: 540, 394
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
-bird3-16x16
-  rotate: false
-  xy: 52, 10
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
 ground-321x96
   rotate: false
-  xy: 304, 412
+  xy: 2, 106
   size: 321, 96
   orig: 321, 96
   offset: 0, 0
   index: -1
 peng
   rotate: false
-  xy: 627, 466
+  xy: 2, 62
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peng2
   rotate: false
-  xy: 677, 492
+  xy: 52, 88
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peng3
   rotate: false
-  xy: 304, 174
+  xy: 359, 160
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pipe-32x200
   rotate: false
-  xy: 506, 210
+  xy: 325, 2
   size: 32, 200
   orig: 32, 200
   offset: 0, 0
   index: -1
 play_down
   rotate: false
-  xy: 2, 2
+  xy: 2, 80
   size: 48, 24
   orig: 48, 24
   offset: 0, 0
   index: -1
 play_up
   rotate: false
-  xy: 627, 484
+  xy: 359, 178
   size: 48, 24
   orig: 48, 24
   offset: 0, 0
   index: -1
-title
+ruby1
   rotate: false
-  xy: 304, 210
-  size: 200, 200
-  orig: 200, 200
+  xy: 409, 186
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ruby2
+  rotate: false
+  xy: 2, 44
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ruby3
+  rotate: false
+  xy: 20, 62
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ruby4
+  rotate: false
+  xy: 70, 88
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ruby5
+  rotate: false
+  xy: 359, 142
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+ruby6
+  rotate: false
+  xy: 377, 160
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+white-pixel
+  rotate: false
+  xy: 52, 85
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1
