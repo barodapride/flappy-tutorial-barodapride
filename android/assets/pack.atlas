@@ -4,107 +4,114 @@ size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+background-buildings
+  rotate: false
+  xy: 2, 46
+  size: 150, 64
+  orig: 150, 64
+  offset: 0, 0
+  index: -1
 ground-321x96
   rotate: false
-  xy: 2, 106
+  xy: 2, 112
   size: 321, 96
   orig: 321, 96
   offset: 0, 0
   index: -1
 peng
   rotate: false
-  xy: 2, 62
+  xy: 154, 94
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peng-dead
   rotate: false
-  xy: 409, 186
+  xy: 2, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peng2
   rotate: false
-  xy: 52, 88
+  xy: 359, 166
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peng3
   rotate: false
-  xy: 359, 160
+  xy: 409, 192
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pipe-32x200
   rotate: false
-  xy: 325, 2
+  xy: 325, 8
   size: 32, 200
   orig: 32, 200
   offset: 0, 0
   index: -1
 play_down
   rotate: false
-  xy: 2, 80
+  xy: 359, 184
   size: 48, 24
   orig: 48, 24
   offset: 0, 0
   index: -1
 play_up
   rotate: false
-  xy: 359, 178
+  xy: 2, 20
   size: 48, 24
   orig: 48, 24
   offset: 0, 0
   index: -1
 ruby1
   rotate: false
-  xy: 2, 44
+  xy: 52, 28
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby2
   rotate: false
-  xy: 20, 62
+  xy: 154, 76
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby3
   rotate: false
-  xy: 70, 88
+  xy: 172, 94
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby4
   rotate: false
-  xy: 359, 142
+  xy: 359, 148
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby5
   rotate: false
-  xy: 377, 160
+  xy: 377, 166
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby6
   rotate: false
-  xy: 427, 186
+  xy: 427, 192
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 white-pixel
   rotate: false
-  xy: 52, 85
+  xy: 409, 189
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

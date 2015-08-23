@@ -28,7 +28,7 @@ public class Assets {
     public static TextureRegion bird2;
     public static TextureRegion bird3;
     public static TextureRegion birdDead;
-    public static TextureRegion background;
+    public static TextureRegion backgroundBuildings;
     public static TextureRegion ground;
     public static TextureRegion pipe;
     public static TextureRegion title;
@@ -58,7 +58,7 @@ public class Assets {
         bird3 = atlas.findRegion("peng3");
         birdDead = atlas.findRegion("peng-dead");
 
-        background = atlas.findRegion("background-300x480");
+        backgroundBuildings = atlas.findRegion("background-buildings");
         ground = atlas.findRegion("ground-321x96");
         pipe = atlas.findRegion("pipe-32x200");
         title = atlas.findRegion("title");

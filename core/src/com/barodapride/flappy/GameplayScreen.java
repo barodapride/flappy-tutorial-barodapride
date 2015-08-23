@@ -34,6 +34,7 @@ public class GameplayScreen extends ScreenAdapter {
     private Label tapToFlap;
 
     private Image whitePixel;
+    private Image backgroundBuildings;
 
     private int score;
 
@@ -83,6 +84,8 @@ public class GameplayScreen extends ScreenAdapter {
         tapToFlap.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT, Align.bottom);
         uiStage.addActor(tapToFlap);
 
+        initBackgroundBuildings();
+
         pipePairs = new Array<PipePair>();
 
         ground = new Ground();
@@ -92,10 +95,18 @@ public class GameplayScreen extends ScreenAdapter {
 
         // The order actors are added determines the order they are drawn so make sure the background is first
         gameplayStage.addActor(ground);
+        gameplayStage.addActor(backgroundBuildings);
         gameplayStage.addActor(bird);
 
         // Setup the input processor
         initInputProcessor();
+    }
+
+    private void initBackgroundBuildings() {
+        backgroundBuildings = new Image(Assets.backgroundBuildings);
+        backgroundBuildings.setWidth(FlappyGame.WIDTH);
+        backgroundBuildings.setHeight(backgroundBuildings.getHeight()*2f);
+        backgroundBuildings.setY(Ground.HEIGHT);
     }
 
     @Override
@@ -148,6 +159,7 @@ public class GameplayScreen extends ScreenAdapter {
                 @Override
                 public void run() {
                     Assets.playWooshSound();
+
                 }
             });
 
@@ -162,6 +174,8 @@ public class GameplayScreen extends ScreenAdapter {
             tapToRetry.addAction(actions);
 
             best.setText("Best: " + SavedDataManager.getInstance().getHighScore());
+            best.setWidth(best.getTextBounds().width);
+            best.setPosition(FlappyGame.CENTER_X, 0, Align.top);
             best.addAction(Actions.delay(1f, Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y, Align.top,
                     .75f, Interpolation.sine)));
 
@@ -233,7 +247,8 @@ public class GameplayScreen extends ScreenAdapter {
 
     private void updateScoreLabel() {
         scoreLabel.setText(String.valueOf(score));
-        // TODO: center the label according to width
+        scoreLabel.setWidth(scoreLabel.getTextBounds().width);
+        scoreLabel.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * .9f, Align.center);
     }
 
     private void stopTheWorld() {

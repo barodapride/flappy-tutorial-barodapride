@@ -1,17 +1,13 @@
 package com.barodapride.flappy;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -25,6 +21,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
     private Label titleLabel;
     private Button playButton;
+    private Image backgroundBuildings;
+    private Ground ground;
 
     public MainMenuScreen(FlappyGame game) {
 
@@ -33,13 +31,26 @@ public class MainMenuScreen extends ScreenAdapter {
 
         initPlayButton();
 
+        ground = new Ground();
+
         titleLabel = new Label("Bird vs. Pipes", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
         titleLabel.setPosition(FlappyGame.CENTER_X, FlappyGame.HEIGHT *.75f, Align.center);
 
-        stage.addActor(playButton);
+        initBackgroundBuildings();
+
+        stage.addActor(ground);
+        stage.addActor(backgroundBuildings);
         stage.addActor(titleLabel);
+        stage.addActor(playButton);
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void initBackgroundBuildings() {
+        backgroundBuildings = new Image(Assets.backgroundBuildings);
+        backgroundBuildings.setWidth(FlappyGame.WIDTH);
+        backgroundBuildings.setHeight(backgroundBuildings.getHeight() * 2f);
+        backgroundBuildings.setY(Ground.HEIGHT);
     }
 
     private void initPlayButton() {

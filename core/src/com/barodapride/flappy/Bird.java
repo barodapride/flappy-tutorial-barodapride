@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public class Bird extends Actor {
@@ -141,7 +142,15 @@ public class Bird extends Actor {
 
     public void setToDying() {
         Assets.playPunchSound();
-        Assets.playDieSound();
+
+        addAction(Actions.delay(.25f,Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                Assets.playDieSound();
+            }
+        })));
+
+
         state = State.DYING;
         vel.y = 0;
     }
