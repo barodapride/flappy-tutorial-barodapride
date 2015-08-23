@@ -18,9 +18,15 @@ public class FlappyGame extends Game {
 	@Override
 	public void create () {
         Assets.load();
-//		setScreen(new GameplayScreen(this));
+        SavedDataManager.getInstance().load();
         setScreen(new MainMenuScreen(this));
 	}
+
+    @Override
+    public void pause() {
+        super.pause();
+        SavedDataManager.getInstance().save();
+    }
 
     @Override
     public void dispose() {

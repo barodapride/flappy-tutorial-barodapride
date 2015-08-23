@@ -18,6 +18,13 @@ peng
   orig: 16, 16
   offset: 0, 0
   index: -1
+peng-dead
+  rotate: false
+  xy: 409, 186
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 peng2
   rotate: false
   xy: 52, 88
@@ -55,42 +62,42 @@ play_up
   index: -1
 ruby1
   rotate: false
-  xy: 409, 186
+  xy: 2, 44
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby2
   rotate: false
-  xy: 2, 44
+  xy: 20, 62
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby3
   rotate: false
-  xy: 20, 62
+  xy: 70, 88
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby4
   rotate: false
-  xy: 70, 88
+  xy: 359, 142
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby5
   rotate: false
-  xy: 359, 142
+  xy: 377, 160
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ruby6
   rotate: false
-  xy: 377, 160
+  xy: 427, 186
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

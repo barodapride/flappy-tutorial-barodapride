@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -28,6 +30,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     private Label scoreLabel;
     private Label tapToRetry;
+    private Label best;
     private Label tapToFlap;
 
     private Image whitePixel;
@@ -44,6 +47,7 @@ public class GameplayScreen extends ScreenAdapter {
     private Color backgroundColor;
 
     private State screenState = State.PREGAME;
+    private boolean allowRestart = false;
 
     private enum State {PREGAME, PLAYING, DYING, DEAD}
 
@@ -68,11 +72,15 @@ public class GameplayScreen extends ScreenAdapter {
         uiStage.addActor(scoreLabel);
 
         tapToRetry = new Label("Tap To Retry!", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
-        tapToRetry.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * .2f, Align.center);
+        tapToRetry.setPosition(FlappyGame.WIDTH / 2, 0, Align.top);
         uiStage.addActor(tapToRetry);
 
+        best = new Label("Best: ", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
+        best.setPosition(FlappyGame.WIDTH / 2, 0, Align.top);
+        uiStage.addActor(best);
+
         tapToFlap = new Label("Tap To Flap!", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
-        tapToFlap.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT * 1.25f, Align.center);
+        tapToFlap.setPosition(FlappyGame.WIDTH / 2, FlappyGame.HEIGHT, Align.bottom);
         uiStage.addActor(tapToFlap);
 
         pipePairs = new Array<PipePair>();
@@ -90,12 +98,10 @@ public class GameplayScreen extends ScreenAdapter {
         initInputProcessor();
     }
 
-
     @Override
     public void show() {
-        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y + 100f, Align.center, 1f, Interpolation.sine));
-        tapToRetry.addAction(Actions.moveBy(0, -200f));
-
+        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y + 100f, Align.center, .75f, Interpolation.sine));
+        Assets.playWooshSound();
     }
 
     @Override
@@ -136,7 +142,29 @@ public class GameplayScreen extends ScreenAdapter {
         checkCollisions();
         if (bird.getState() == Bird.State.DYING) {
             stopTheWorld();
-            tapToRetry.addAction(Actions.delay(1f, Actions.moveBy(0f, 250f, 2f, Interpolation.sine)));
+
+
+            RunnableAction playWooshAction = Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    Assets.playWooshSound();
+                }
+            });
+
+            SequenceAction actions = Actions.sequence(Actions.delay(1f), playWooshAction, Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y, Align.bottom,
+                    .75f, Interpolation.sine), Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    // Allow the player to restart the game once the tap to retry finishes coming up
+                    allowRestart = true;
+                }
+            }));
+            tapToRetry.addAction(actions);
+
+            best.setText("Best: " + SavedDataManager.getInstance().getHighScore());
+            best.addAction(Actions.delay(1f, Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.CENTER_Y, Align.top,
+                    .75f, Interpolation.sine)));
+
             screenState = State.DYING;
         }
         gameplayStage.draw();
@@ -171,15 +199,20 @@ public class GameplayScreen extends ScreenAdapter {
 
         for (int i = 0; i < pipePairs.size; i++) {
             PipePair pair = pipePairs.get(i);
-            if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds())) {
+            if (pair.getBottomPipe().getBounds().overlaps(bird.getBounds()) || pair.getTopPipe().getBounds().overlaps(bird.getBounds())) {
                 stopTheWorld();
+                SavedDataManager.getInstance().setHighScore(score);
                 showWhiteScreen();
-            }
-            if (pair.getTopPipe().getBounds().overlaps(bird.getBounds())) {
-                stopTheWorld();
+            } else if (bird.isBelowGround()) {
+                bird.setY(FlappyGame.GROUND_LEVEL);
+                bird.clearActions();
+                bird.setToDying();
                 showWhiteScreen();
-            }
-            if (pair.getRuby().getBounds().overlaps(bird.getBounds())) {
+            } else if (bird.isAboveCeiling()) {
+                bird.setY(FlappyGame.HEIGHT - bird.getHeight());
+                bird.setToDying();
+                showWhiteScreen();
+            } else if (pair.getRuby().getBounds().overlaps(bird.getBounds())) {
                 score++;
                 updateScoreLabel();
                 pair.moveCoinOffscreen();
@@ -208,6 +241,7 @@ public class GameplayScreen extends ScreenAdapter {
         killPipePairs();
         stopTheGround();
         screenState = State.DYING;
+
     }
 
     private void stopTheGround() {
@@ -280,14 +314,16 @@ public class GameplayScreen extends ScreenAdapter {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-                switch(screenState){
+                switch (screenState) {
 
                     case DYING:
                         justTouched = true;
                         break;
 
                     case DEAD:
-                        game.setScreen(new GameplayScreen(game));
+                        if (allowRestart) {
+                            game.setScreen(new GameplayScreen(game));
+                        }
                         justTouched = true;
                         break;
 
@@ -300,7 +336,7 @@ public class GameplayScreen extends ScreenAdapter {
                         screenState = State.PLAYING;
                         bird.setState(Bird.State.ALIVE);
                         bird.clearActions();
-                        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.HEIGHT * 1.25f, Align.center, 1f, Interpolation.sine));
+                        tapToFlap.addAction(Actions.moveToAligned(FlappyGame.CENTER_X, FlappyGame.HEIGHT, Align.bottom, .75f, Interpolation.sine));
                         initFirstSetOfPipes();
                         initSecondSetOfPipes();
                         initThirdSetOfPipes();

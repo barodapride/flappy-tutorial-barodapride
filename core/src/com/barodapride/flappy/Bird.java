@@ -93,23 +93,14 @@ public class Bird extends Actor {
         applyAccel(delta);
         updatePosition(delta);
 
-        if (isBelowGround()){
-            setY(FlappyGame.GROUND_LEVEL);
-            clearActions();
-            setToDying();
-        }
 
-        if (isAboveCeiling()){
-            setY(FlappyGame.HEIGHT - getHeight());
-            setToDying();
-        }
     }
 
-    private boolean isAboveCeiling() {
+    public boolean isAboveCeiling() {
         return (getY(Align.top) >= FlappyGame.HEIGHT);
     }
 
-    private boolean isBelowGround() {
+    public boolean isBelowGround() {
         return (getY(Align.bottom) <= FlappyGame.GROUND_LEVEL);
     }
 
@@ -125,12 +116,32 @@ public class Bird extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.setColor(Color.WHITE);
+        switch (state){
+            case ALIVE:
+            case PREGAME:
+                drawAlive(batch);
+                break;
+            case DEAD:
+            case DYING:
+                drawDead(batch);
+                break;
+        }
+
+    }
+
+    private void drawAlive(Batch batch) {
         batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
+                getScaleY(), getRotation());
+    }
+
+    private void drawDead(Batch batch) {
+        batch.draw(Assets.birdDead, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
                 getScaleY(), getRotation());
     }
 
     public void setToDying() {
         Assets.playPunchSound();
+        Assets.playDieSound();
         state = State.DYING;
         vel.y = 0;
     }

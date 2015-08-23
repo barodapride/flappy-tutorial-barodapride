@@ -15,9 +15,11 @@ public class Assets {
     public static SpriteBatch batch;
     public static BitmapFont fontMedium;
 
-    public static Sound punch;
-    public static Sound flap;
-    public static Sound bing;
+    public static Sound sfxHit;
+    public static Sound sfxFlap;
+    public static Sound sfxBing;
+    public static Sound sfxDie;
+    public static Sound sfxWoosh;
 
 
 
@@ -25,6 +27,7 @@ public class Assets {
     public static TextureRegion bird;
     public static TextureRegion bird2;
     public static TextureRegion bird3;
+    public static TextureRegion birdDead;
     public static TextureRegion background;
     public static TextureRegion ground;
     public static TextureRegion pipe;
@@ -53,6 +56,7 @@ public class Assets {
         bird = atlas.findRegion("peng");
         bird2 = atlas.findRegion("peng2");
         bird3 = atlas.findRegion("peng3");
+        birdDead = atlas.findRegion("peng-dead");
 
         background = atlas.findRegion("background-300x480");
         ground = atlas.findRegion("ground-321x96");
@@ -94,9 +98,11 @@ public class Assets {
         rubyArray.add(ruby1);
         rubyAnimation = new Animation(.07f, rubyArray, Animation.PlayMode.LOOP);
 
-        punch = Gdx.audio.newSound(Gdx.files.internal("sounds/punch.mp3"));
-        flap = Gdx.audio.newSound(Gdx.files.internal("sounds/flap.mp3"));
-        bing = Gdx.audio.newSound(Gdx.files.internal("sounds/bing.mp3"));
+        sfxHit = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx_hit.mp3"));
+        sfxFlap = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx_wing.mp3"));
+        sfxBing = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx_point.mp3"));
+        sfxDie = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx_die.mp3"));
+        sfxWoosh = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx_swooshing.mp3"));
 
     }
 
@@ -111,20 +117,31 @@ public class Assets {
 
         fontMedium.dispose();
 
-        punch.dispose();
-        flap.dispose();
-        bing.dispose();
+        sfxHit.dispose();
+        sfxFlap.dispose();
+        sfxBing.dispose();
+        sfxDie.dispose();
+        sfxWoosh.dispose();
     }
 
     public static void playPunchSound(){
-        punch.play();
+        sfxHit.play();
     }
 
+    public static void playDieSound(){
+        sfxDie.play();
+    }
+
+    public static void playWooshSound(){
+        sfxWoosh.play();
+    }
+
+
     public static void playFlapSound() {
-        flap.play();
+        sfxFlap.play();
     }
 
     public static void playBingSound() {
-        bing.play();
+        sfxBing.play();
     }
 }

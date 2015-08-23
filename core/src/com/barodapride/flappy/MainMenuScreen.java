@@ -18,9 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-/**
- * Created by Mike on 6/20/2015.
- */
 public class MainMenuScreen extends ScreenAdapter {
 
     private FlappyGame game;
@@ -36,7 +33,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
         initPlayButton();
 
-        titleLabel = new Label("Bird vs. Pipe", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
+        titleLabel = new Label("Bird vs. Pipes", new Label.LabelStyle(Assets.fontMedium, Color.WHITE));
         titleLabel.setPosition(FlappyGame.CENTER_X, FlappyGame.HEIGHT *.75f, Align.center);
 
         stage.addActor(playButton);
@@ -70,10 +67,4 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    @Override
-    public void show() {
-        playButton.clearActions();
-        playButton.addAction(Actions.moveBy(0, -100f));
-        playButton.addAction(Actions.moveBy(0, 100f, 1f, Interpolation.sine));
-    }
 }
